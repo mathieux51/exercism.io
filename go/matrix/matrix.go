@@ -1,19 +1,26 @@
 package matrix
 
-type M struct{}
+import (
+	"fmt"
+	"strings"
+)
 
-func New(s string) (*M, error) {
+type Matrix struct{}
+
+func New(s string) (*Matrix, error) {
+	rows := strings.Split(s, "\n")
+	fmt.Println(rows)
 	return nil, nil
 }
 
-func (m *M) Rows() [][]int {
+func (m *Matrix) Rows() [][]int {
 	return nil
 }
 
-func (m *M) Cols() [][]int {
+func (m *Matrix) Cols() [][]int {
 	return nil
 }
 
-func (m *M) Set(i, j, v int) bool {
+func (m *Matrix) Set(i, j, v int) bool {
 	return true
 }
