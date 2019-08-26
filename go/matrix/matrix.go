@@ -1,7 +1,7 @@
 package matrix
 
 import (
-	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -10,14 +10,19 @@ type Matrix struct{}
 func New(s string) (*Matrix, error) {
 	rows := strings.Split(s, "\n")
 	// var cols = 0
+	m := &Matrix{}
+	for i, row := range rows {
+		fields := strings.Fields(row)
+		for j, f := range fields {
+			v, err := strconv.Atoi(f)
+			if err != nil {
+				return nil, err
+			}
+			m.Set(i, j, v)
+		}
 
-	for _, row := range rows {
-		fmt.Println(row)
 	}
-
-	// fmt.Printf("len(rows): %v\n", len(rows))
-	// fmt.Printf("cols: %v\n", cols)
-	return nil, nil
+	return m, nil
 }
 
 func (m *Matrix) Rows() [][]int {
