@@ -1,18 +1,25 @@
 package matrix
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
 
-type Matrix struct{}
+type Matrix struct {
+	slice [][]int
+}
 
 func New(s string) (*Matrix, error) {
 	rows := strings.Split(s, "\n")
-	// var cols = 0
 	m := &Matrix{}
 	for i, row := range rows {
 		fields := strings.Fields(row)
+
+		if len(fields) == 0 {
+			return nil, errors.New("empty row")
+		}
+
 		for j, f := range fields {
 			v, err := strconv.Atoi(f)
 			if err != nil {
@@ -34,5 +41,6 @@ func (m *Matrix) Cols() [][]int {
 }
 
 func (m *Matrix) Set(i, j, v int) bool {
+	m.slice[i][j] = v
 	return true
 }
