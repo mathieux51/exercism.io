@@ -2,6 +2,7 @@ package matrix
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -14,18 +15,20 @@ func New(s string) (*Matrix, error) {
 	rows := strings.Split(s, "\n")
 	m := &Matrix{}
 	for i, row := range rows {
-		fields := strings.Fields(row)
 
-		if len(fields) == 0 {
+		if len(row) == 0 {
 			return nil, errors.New("empty row")
 		}
 
-		for j, f := range fields {
+		fields := strings.Fields(row)
+		fmt.Println(fields)
+		for _, f := range fields {
 			v, err := strconv.Atoi(f)
 			if err != nil {
 				return nil, err
 			}
-			m.Set(i, j, v)
+			fmt.Println(i, v)
+			// m.slice[i] = append(m.slice[i], v)
 		}
 
 	}
