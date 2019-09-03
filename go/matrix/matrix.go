@@ -7,13 +7,16 @@ import (
 )
 
 type Matrix struct {
-	slice [][]int
+	elements       [][]int
+	rowLen, colLen int
 }
 
 func New(s string) (*Matrix, error) {
 	rows := strings.Split(s, "\n")
-	m := Matrix{}
-	var length int
+	length := make(map[int]struct{})
+	var colLen int
+	var elements [][]int
+
 	for i, row := range rows {
 
 		if len(row) == 0 {
@@ -23,11 +26,12 @@ func New(s string) (*Matrix, error) {
 		fields := strings.Fields(row)
 
 		if i == 0 {
-			length = len(fields)
+			colLen = len(fields)
+			length[colLen] = struct{}{}
 		}
 
-		if i > 0 && length != len(fields) {
-			return nil, errors.New("funky matrice")
+		if _, ok := length[len(fields)]; !ok {
+			return nil, errors.New("uneven matrice")
 		}
 
 		r := []int{}
@@ -38,8 +42,11 @@ func New(s string) (*Matrix, error) {
 			}
 			r = append(r, v)
 		}
-		m.slice = append(m.slice, r)
+		elements = append(elements, r)
 	}
+
+	m := Matrix{elements: elements, rowLen: len(rows), colLen: colLen}
+
 	return &m, nil
 }
 
@@ -52,6 +59,6 @@ func (m *Matrix) Cols() [][]int {
 }
 
 func (m *Matrix) Set(i, j, v int) bool {
-	m.slice[i][j] = v
+	m.elements[i][j] = v
 	return true
 }
