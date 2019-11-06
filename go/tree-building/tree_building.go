@@ -11,5 +11,12 @@ type Node struct {
 }
 
 func Build(records []Record) (*Node, error) {
-	return &Node{}, nil
+	if len(records) == 0 {
+		return nil, nil
+	}
+
+	for record := range records {
+		return &Node{record.ID}
+	}
+
 }

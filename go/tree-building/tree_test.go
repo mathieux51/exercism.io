@@ -54,7 +54,7 @@ var successTestCases = []struct {
 		},
 		expected: &Node{
 			ID: 0,
-			Children: []*Node{
+			IDChildren: []*Node{
 				{ID: 1},
 				{ID: 2},
 			},
