@@ -2,31 +2,43 @@ package robotname
 
 import (
 	"math/rand"
+	"strconv"
 	"strings"
-	"time"
 )
 
 type Robot struct {
 	name string
 }
 
-// random int between 1 and 24
-// map int to letter
+func randInt(min int, max int) int {
+	return min + rand.Intn(max-min)
+}
+
 func randomLetter() string {
-	rand.Seed(time.Now().UnixNano())
-	s := 'a' + rand.Intn(26)
+	s := 'a' + randInt(0, 26)
 	return strings.ToUpper(string(s))
 }
 
 func generateName() string {
 	name := make([]string, 5)
 	name = append(name, randomLetter())
+	name = append(name, randomLetter())
+	name = append(name, strconv.Itoa(randInt(0, 9)))
+	name = append(name, strconv.Itoa(randInt(0, 9)))
+	name = append(name, strconv.Itoa(randInt(0, 9)))
 	return strings.Join(name, "")
 }
 
-func (r Robot) Name() (string, error) {
+func (r *Robot) Name() (string, error) {
+	if r.name != "" {
+		return r.name, nil
+	}
 
-	name := generateName()
-	return name, nil
+	r.name = generateName()
+
+	return r.name, nil
 }
-func (r Robot) Reset() {}
+
+func (r *Robot) Reset() {
+	r.name = ""
+}
