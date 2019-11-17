@@ -10,6 +10,8 @@ type Robot struct {
 	name string
 }
 
+var names = make(map[string]struct{})
+
 func randInt(min int, max int) int {
 	return min + rand.Intn(max-min)
 }
@@ -26,7 +28,17 @@ func generateName() string {
 	name = append(name, strconv.Itoa(randInt(0, 9)))
 	name = append(name, strconv.Itoa(randInt(0, 9)))
 	name = append(name, strconv.Itoa(randInt(0, 9)))
-	return strings.Join(name, "")
+
+	var n string = strings.Join(name, "")
+	_, notUnique := names[n]
+
+	if notUnique {
+		return generateName()
+	}
+
+	names[n] = struct{}{}
+
+	return n
 }
 
 func (r *Robot) Name() (string, error) {
@@ -40,5 +52,6 @@ func (r *Robot) Name() (string, error) {
 }
 
 func (r *Robot) Reset() {
+	delete(names, r.name)
 	r.name = ""
 }
