@@ -4,10 +4,12 @@ import (
 	"math/rand"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 type Robot struct {
 	name string
+	m    sync.Mutex
 }
 
 var names = make(map[string]struct{})
@@ -21,7 +23,7 @@ func randomLetter() string {
 	return strings.ToUpper(string(s))
 }
 
-func generateName() string {
+func generateName(m *sync.Mutex) string {
 	name := make([]string, 5)
 	name = append(name, randomLetter())
 	name = append(name, randomLetter())
@@ -30,10 +32,12 @@ func generateName() string {
 	name = append(name, strconv.Itoa(randInt(0, 9)))
 
 	var n string = strings.Join(name, "")
+	m.Lock()
+	defer m.Unlock()
 	_, notUnique := names[n]
 
 	if notUnique {
-		return generateName()
+		return generateName(m)
 	}
 
 	names[n] = struct{}{}
@@ -46,12 +50,14 @@ func (r *Robot) Name() (string, error) {
 		return r.name, nil
 	}
 
-	r.name = generateName()
+	r.name = generateName(&r.m)
 
 	return r.name, nil
 }
 
 func (r *Robot) Reset() {
+	r.m.Lock()
+	defer r.m.Unlock()
 	delete(names, r.name)
 	r.name = ""
 }
