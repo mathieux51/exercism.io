@@ -3,4 +3,7 @@
 # Read this https://www.computerhope.com/unix/bash/read.htm
 # Get argument from command line
 # override default
-# echo "One for X, one for me."
+set -o errexit
+set -o nounset
+
+echo "One for ${1:-you}, one for me."
