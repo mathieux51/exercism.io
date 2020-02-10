@@ -14,11 +14,19 @@
 #   # ...
 #   # ...
 #
-#   main () {
-#     # your main function code here
-#   }
+set -o errexit
+set -o nounset
+
+main () {
+  words=$(echo ${1//[^a-zA-Z\']/ } | tr -s ' ')
+  a=''
+  for w in $words
+  do
+    a=$a${w:0:1}
+  done
+  echo ${a^^}
+
+}
 #
 #   # call main with all of the positional arguments
-#   main "$@"
-#
-# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***
+main "$@"
